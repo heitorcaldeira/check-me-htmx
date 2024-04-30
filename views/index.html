@@ -1,0 +1,49 @@
+{{ block "index" . }}
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>HTMX</title>
+      <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+      <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+      <div 
+        class="flex items-center flex-col w-full justify-center p-8" 
+      >
+        <form 
+          hx-post="/add"
+          hx-target="#todo-list"
+          hx-on::after-request="this.input.value = ''"
+        >
+          <input 
+            class="px-2 py-4 border-2 bg-slate-600 outline-0 text-white" 
+            type="text"
+            name="title"
+            placeholder="Add a todo"
+            id="input"
+            autocomplete="off" 
+          />
+
+          <button type="submit" class="border-2 p-4">Send</button>
+        </form>
+        <div class="flex flex-column m-4">
+          <div class="flex items-center flex-col flex-gap-2">
+            {{ template "list" . }}
+          </div>
+        </div>
+      </div>
+    </body>
+  </html>
+{{ end }}
+
+{{ block "list" . }}
+  {{ range .List }}
+    <div id="todo-list">
+      <span class="mr-4">
+        {{ .Title }}
+      </span>
+    </div>
+  {{ end }}
+{{ end }}
